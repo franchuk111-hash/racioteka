@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1a2b4a">
+  <title>Калькулятор повної вартості раціону — Раціотека</title>
+  <meta name="description" content="Порівняйте два раціони за повною вартістю: харчування, доставка, доплати та знижки. Безкоштовний калькулятор Раціотеки працює прямо у браузері.">
+  <link rel="canonical" href="https://franchuk111-hash.github.io/racioteka/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Скільки насправді коштує ваш раціон? — Раціотека">
+  <meta property="og:description" content="Два варіанти. Однакова кількість днів. Усі витрати в одному розрахунку.">
+  <meta property="og:url" content="https://franchuk111-hash.github.io/racioteka/">
+  <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="calculator.css">
+  <script src="cost.js" defer></script>
+  <script src="calculator.js" defer></script>
+</head>
+<body>
+  <header class="site-header"><div class="header-inner">
+    <a class="brand" href="https://racioteka.com.ua/" aria-label="Раціотека — на головну сайту"><img src="assets/logo-mark.svg" width="38" height="38" alt="">Раціотека</a>
+    <a class="header-link" href="https://racioteka.com.ua/catalog/">Каталог раціонів <span aria-hidden="true">↗</span></a>
+  </div></header>
+  <main id="main">
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">ІНСТРУМЕНТ РАЦІОТЕКИ</p>
+      <h1 id="page-title">Порівнюйте раціони.<br><span>Враховуйте всі витрати.</span></h1>
+      <p class="lead">Ціна за день — лише початок. Додайте доставку, доплати та знижки, щоб побачити повну суму двох пропозицій.</p>
+    </section>
+    <form id="comparison" novalidate>
+      <div class="period-bar">
+        <label for="days">На скільки днів порівнюємо?</label>
+        <div class="days-field"><input id="days" name="days" type="number" min="1" max="366" step="1" value="5" required aria-describedby="period-note"><span>днів</span></div>
+        <p id="period-note">Однаковий період для обох пропозицій.</p>
+      </div>
+      <div class="offer-grid" id="offers">
+        <fieldset class="offer" data-offer="a"><legend><span class="letter">А</span> Перший варіант</legend>
+          <label for="a-name">Сервіс або програма <span class="optional">необов’язково</span></label><input id="a-name" name="a-name" maxlength="70" placeholder="Наприклад, сервіс А" autocomplete="off">
+          <label for="a-daily">Ціна раціону за день, грн</label><input id="a-daily" name="a-daily" inputmode="decimal" required placeholder="500" aria-describedby="daily-note">
+          <div class="field-pair"><div><label for="a-deliveryFee">Одна доставка, грн</label><input id="a-deliveryFee" name="a-deliveryFee" inputmode="decimal" required placeholder="Уточніть ціну"></div><div><label for="a-deliveries">Кількість доставок</label><input id="a-deliveries" name="a-deliveries" type="number" min="0" max="366" step="1" required placeholder="3"></div></div>
+          <div class="field-pair"><div><label for="a-extras">Доплати за весь період, грн</label><input id="a-extras" name="a-extras" inputmode="decimal" value="0" required></div><div><label for="a-discount">Знижка за весь період, грн</label><input id="a-discount" name="a-discount" inputmode="decimal" value="0" required></div></div>
+        </fieldset>
+        <fieldset class="offer" data-offer="b"><legend><span class="letter">Б</span> Другий варіант</legend>
+          <label for="b-name">Сервіс або програма <span class="optional">необов’язково</span></label><input id="b-name" name="b-name" maxlength="70" placeholder="Наприклад, сервіс Б" autocomplete="off">
+          <label for="b-daily">Ціна раціону за день, грн</label><input id="b-daily" name="b-daily" inputmode="decimal" required placeholder="550" aria-describedby="daily-note">
+          <div class="field-pair"><div><label for="b-deliveryFee">Одна доставка, грн</label><input id="b-deliveryFee" name="b-deliveryFee" inputmode="decimal" required placeholder="Уточніть ціну"></div><div><label for="b-deliveries">Кількість доставок</label><input id="b-deliveries" name="b-deliveries" type="number" min="0" max="366" step="1" required placeholder="3"></div></div>
+          <div class="field-pair"><div><label for="b-extras">Доплати за весь період, грн</label><input id="b-extras" name="b-extras" inputmode="decimal" value="0" required></div><div><label for="b-discount">Знижка за весь період, грн</label><input id="b-discount" name="b-discount" inputmode="decimal" value="0" required></div></div>
+        </fieldset>
+      </div>
+      <p class="input-note" id="daily-note">Не знаєте вартість доставки? Уточніть її у сервісу. Вкажіть 0 лише тоді, коли доставка справді безкоштовна. Доплати й знижки вказуйте за весь обраний період.</p>
+      <p class="error" id="error" role="alert" hidden></p>
+      <div class="actions"><button class="button primary" type="submit">Порівняти повну вартість <span aria-hidden="true">→</span></button><button class="button secondary" id="example" type="button">Спробувати на прикладі</button><button class="text-button" type="reset">Очистити</button></div>
+      <p class="example-note" id="example-note" hidden>Показано умовні суми для демонстрації, а не актуальні тарифи компаній.</p>
+    </form>
+    <section class="results" id="results" aria-labelledby="results-title" tabindex="-1" hidden>
+      <p class="eyebrow">ВАШ РОЗРАХУНОК</p><h2 id="results-title">Повна вартість замовлення</h2>
+      <p class="verdict" id="verdict"></p><div class="result-grid" id="result-cards"></div>
+      <p class="input-note">Менша сума не означає кращий раціон. Порівняйте також кількість страв, порції, склад та умови доставки.</p>
+      <a class="button primary" href="https://racioteka.com.ua/catalog/">Знайти раціони в каталозі <span aria-hidden="true">↗</span></a>
+    </section>
+    <section class="method" aria-labelledby="method-title"><h2 id="method-title">Без прихованої математики</h2>
+      <p class="formula">Ціна за день × дні + доставка × кількість доставок + доплати − знижка</p>
+      <div class="method-grid"><div><h3>Що включити в доплати?</h3><p>Платне пакування, додаткові страви та інші обов’язкові витрати, які ще не включені в ціну раціону або доставки.</p></div><div><h3>Що перевірити перед оплатою?</h3><p>Зону доставки, мінімальне замовлення, кількість страв і днів у пакеті. Остаточні умови підтверджує обраний сервіс.</p></div></div>
+      <a class="article-link" href="https://racioteka.com.ua/blog/povna-vartist-zamovlennia/">Як перевірити повну вартість замовлення <span aria-hidden="true">→</span></a>
+    </section>
+    <noscript><p class="error">Для розрахунку увімкніть JavaScript у браузері. <a href="docs/calculator.md">Опис формули</a> доступний без JavaScript.</p></noscript>
+  </main>
+  <footer><div class="footer-inner"><div><a class="brand" href="https://racioteka.com.ua/"><img src="assets/logo-mark.svg" width="32" height="32" alt="">Раціотека</a><p>Український каталог для порівняння сервісів доставки готових раціонів.</p></div><div class="footer-links"><a href="https://racioteka.com.ua/">racioteka.com.ua ↗</a><a href="https://github.com/franchuk111-hash/racioteka">Відкритий код на GitHub ↗</a><a href="https://racioteka.com.ua/methodology/">Як ми порівнюємо ↗</a></div></div><p class="privacy-note">Розрахунок працює у вашому браузері. Введені суми не надсилаються на сервер. Інструмент порівнює витрати й не визначає потребу в калоріях.</p></footer>
+</body></html>

@@ -1,0 +1,12 @@
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const { calculate, money, count } = require('./cost.js');
+const quote = { daily: '500', deliveryFee: '80', deliveries: '3', extras: '100', discount: '50' };
+test('complete quote matches Python example', () => { assert.deepEqual(calculate(quote, '5'), { days: 5, meals: 250000, delivery: 24000, extras: 10000, discount: 5000, total: 279000, perDay: 55800 }); });
+test('currency uses exact kopecks and accepts decimal comma', () => { assert.equal(money('100,10'), 10010); assert.equal(calculate({ daily: '100.10', deliveryFee: '0', deliveries: '0', extras: '0.03', discount: '0' }, 3).total, 30033); });
+test('unknown delivery is not silently free', () => { assert.throws(() => calculate({ ...quote, deliveryFee: '' }, 5)); });
+test('reject malformed or nonfinite money', () => { for (const value of ['', ' ', '-1', 'NaN', 'Infinity', '1e3', '1.001', '10000001', '<script>', '12abc']) assert.throws(() => money(value), undefined, value); });
+test('days and deliveries are bounded integers', () => { for (const value of ['0', '-1', '1.5', '367', '', true]) assert.throws(() => count(value, 1, 'Дні')); assert.equal(count('0', 0, 'Доставки'), 0); assert.equal(count('366', 1, 'Дні'), 366); });
+test('zero total allowed, excessive discount rejected', () => { assert.equal(calculate({ daily: '100', deliveryFee: '0', deliveries: '0', extras: '0', discount: '100' }, 1).total, 0); assert.throws(() => calculate({ ...quote, discount: '10000' }, 5)); });
+test('daily sticker price can reverse after delivery costs', () => { const a = calculate(quote, 5); const b = calculate({ daily: '550', deliveryFee: '0', deliveries: '3', extras: '0', discount: '0' }, 5); assert.ok(a.total > b.total); assert.equal(a.total - b.total, 4000); });
+test('round only for display, preserve fractional daily costs', () => { assert.equal(calculate({ daily: '1', deliveryFee: '0', deliveries: '0', extras: '0.01', discount: '0' }, 3).perDay, 301 / 3); });
